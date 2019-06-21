@@ -18,4 +18,5 @@ from bbelection import views
 
 urlpatterns = [
     path('', views.home),
+    path('candy/<int:id>/count', views.home),
 ]

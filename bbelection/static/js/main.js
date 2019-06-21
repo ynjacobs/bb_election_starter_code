@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log(data);
         let ul = document.querySelector('#candidates');
         
-        data.forEach(candidate => {
+        data.forEach((candidate,zIndex) => {
             let li = document.createElement('li');
             let form = document.createElement('form');
             let btn = document.createElement('button');
@@ -28,8 +28,11 @@ document.addEventListener("DOMContentLoaded", function() {
             // li.innerHTML = form;
             form.appendChild(btn);
             form.appendChild(hdnInput);
-            let textNode = document.createTextNode(zText);
-            li.appendChild(textNode);
+            // let textNode = document.createTextNode(zText);
+            let divNode = document.createElement('span');
+            divNode.innerText = zText;
+
+            li.appendChild(divNode);
             li.appendChild(form);
             ul.appendChild(li);
             // li.innerText = zText;
@@ -39,10 +42,26 @@ document.addEventListener("DOMContentLoaded", function() {
             form.addEventListener('submit', e => {
                 e.preventDefault();
                 console.log('i am submitted');
-                axios.post('https://bb-election-api.herokuapp.com/vote', { name})
+                
+                axios.post(e.target.action, {name})
+
                 .then(response => {
 
-document.querySelectorAll('button').forEach(e => {e.disabled = 'true'});
+                document.querySelectorAll('button').forEach(e => {e.disabled = 'true'});
+
+                axios.get('https://bb-election-api.herokuapp.com/').then(res => {
+                    let candidates = res.data.candidates;
+                    
+                    let newName = candidates[zIndex].name;
+                    let newVotes = candidates[zIndex].votes;
+                    li.querySelector('span').innerText = `${newName}, ${newVotes}`;
+                    // console.log('=>|', li.get);
+
+
+                    
+                    // textNode = `${name}, ${votes}`;
+                    
+                });
 
                 })
                 .catch(e => {});
